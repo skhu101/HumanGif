@@ -29,14 +29,14 @@ This repository will contain the official implementation of _HumanGif: Single-Vi
 ## :love_you_gesture: Citation
 <!-- --- -->
 
-If you find the codes of this work or the associated ReSynth dataset helpful to your research, please consider citing:
+If you find the codes of this work helpful to your research, please consider citing:
 
 ```bibtex
-    @article{hu2023gauhuman,
-    title={HumanGif: Single-View Human Diffusion with Generative Prior},
-    author={Hu, Shoukang and Narihira, Takuya and Fukuda, Kazumi and Sawata, Ryosuke and Shibuya, Takashi and Mitsufuji, Yuki},
-    journal={arXiv preprint arXiv:},
-    year={2025}
-    }
+@article{hu2023gauhuman,
+title={HumanGif: Single-View Human Diffusion with Generative Prior},
+author={Hu, Shoukang and Narihira, Takuya and Fukuda, Kazumi and Sawata, Ryosuke and Shibuya, Takashi and Mitsufuji, Yuki},
+journal={arXiv preprint arXiv:},
+year={2025}
+}
 ```
 
