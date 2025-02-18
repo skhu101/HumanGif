@@ -32,7 +32,7 @@ This repository will contain the official implementation of _HumanGif: Single-Vi
 If you find the codes of this work helpful to your research, please consider citing:
 
 ```bibtex
-@article{hu2023humangif,
+@article{hu2025humangif,
 title={HumanGif: Single-View Human Diffusion with Generative Prior},
 author={Hu, Shoukang and Narihira, Takuya and Fukuda, Kazumi and Sawata, Ryosuke and Shibuya, Takashi and Mitsufuji, Yuki},
 journal={arXiv preprint},
