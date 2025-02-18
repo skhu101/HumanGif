@@ -35,7 +35,7 @@ If you find the codes of this work helpful to your research, please consider cit
 @article{hu2023gauhuman,
 title={HumanGif: Single-View Human Diffusion with Generative Prior},
 author={Hu, Shoukang and Narihira, Takuya and Fukuda, Kazumi and Sawata, Ryosuke and Shibuya, Takashi and Mitsufuji, Yuki},
-journal={arXiv preprint arXiv:},
+journal={arXiv preprint},
 year={2025}
 }
 ```
