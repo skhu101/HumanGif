@@ -25,7 +25,7 @@
 
 # News
 
-- **`2025/02/20`**: 🌟🌟🌟Training source code released.
+- **`2025/02/27`**: 🌟🌟🌟Training and Inference source code released.
 
 # Installation
 
