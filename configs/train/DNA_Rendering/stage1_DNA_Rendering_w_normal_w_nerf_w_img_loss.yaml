@@ -1,0 +1,111 @@
+exp_name: 'stage1_w_normal_w_nerf_guid_w_img_loss'
+output_dir: './exp_output/DNA_Rendering_github'
+seed: 42
+resume_from_checkpoint: ''
+
+checkpointing_steps: 50000
+# save_model_epoch_interval: 1000
+NeRF:
+  pretrain_nerf: False
+  use_smpl_dist_mask: True # False
+  nerf_cond_type: '480_480_upscale'
+  depth_resolution: 48
+
+# use img loss
+use_diff_img_loss: True
+
+# debug
+debug: False
+
+data:
+  train_bs: 1
+  video_folder: 'data/DNA_Rendering/train' # Your data root folder
+  guids: 
+    # - 'depth'
+    - 'normal'
+    # - 'semantic_map'
+    # - 'dwpose'
+    - 'nerf'
+  image_size: 768
+  bbox_crop: false
+  bbox_resize_ratio: [0.9, 1.5]
+  aug_type: "Resize"
+  data_parts:
+    - "all"
+  sample_margin: 30
+  image_ratio: 0.375
+  nerf_rs_scale: 0.625
+  white_bg: False
+
+validation:
+  validation_steps: 50000
+  ref_images:
+    - data/DNA_Rendering/train/Part_1_0121_02/camera0022/images/000000.png
+    - data/DNA_Rendering/test/Part_1_0008_01/camera0022/images/000000.png
+    - data/DNA_Rendering/test/Part_1_0031_03/camera0022/images/000000.png
+    - data/DNA_Rendering/test/Part_1_0034_04/camera0022/images/000000.png
+    - data/DNA_Rendering/test/Part_1_0094_02/camera0022/images/000000.png
+    - data/DNA_Rendering/test/Part_1_0307_03/camera0022/images/000000.png
+    - data/DNA_Rendering/test/Part_2_0007_07/camera0022/images/000000.png
+    - data/DNA_Rendering/test/Part_2_0016_01/camera0022/images/000000.png
+    - data/DNA_Rendering/test/Part_2_0019_09/camera0022/images/000000.png
+    - data/DNA_Rendering/test/Part_2_0044_07/camera0022/images/000000.png
+    - data/DNA_Rendering/test/Part_2_0078_11/camera0022/images/000000.png
+    - data/DNA_Rendering/test/Part_2_0128_12/camera0022/images/000000.png
+  guidance_folders:
+    - data/DNA_Rendering/train/Part_1_0121_02/camera0022
+    - data/DNA_Rendering/test/Part_1_0008_01/camera0022
+    - data/DNA_Rendering/test/Part_1_0031_03/camera0022
+    - data/DNA_Rendering/test/Part_1_0034_04/camera0022
+    - data/DNA_Rendering/test/Part_1_0094_02/camera0022
+    - data/DNA_Rendering/test/Part_1_0307_03/camera0022
+    - data/DNA_Rendering/test/Part_2_0007_07/camera0022
+    - data/DNA_Rendering/test/Part_2_0016_01/camera0022
+    - data/DNA_Rendering/test/Part_2_0019_09/camera0022
+    - data/DNA_Rendering/test/Part_2_0044_07/camera0022
+    - data/DNA_Rendering/test/Part_2_0078_11/camera0022
+    - data/DNA_Rendering/test/Part_2_0128_12/camera0022
+  guidance_indexes: [20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20] # [0, 30, 60, 90, 120]          
+
+solver:
+  gradient_accumulation_steps: 1
+  mixed_precision: 'fp16'
+  enable_xformers_memory_efficient_attention: True 
+  gradient_checkpointing: False 
+  max_train_steps: 150000
+  max_grad_norm: 1.0
+  # lr
+  learning_rate: 1.0e-5
+  scale_lr: False 
+  lr_warmup_steps: 1
+  lr_scheduler: 'linear'
+
+  # optimizer
+  use_8bit_adam: False 
+  adam_beta1: 0.9
+  adam_beta2: 0.999
+  adam_weight_decay:  1.0e-2
+  adam_epsilon: 1.0e-8
+
+noise_scheduler_kwargs:
+  num_train_timesteps: 1000
+  beta_start:          0.00085
+  beta_end:            0.012
+  beta_schedule:       "scaled_linear"
+  steps_offset:        1
+  clip_sample:         false
+
+guidance_encoder_kwargs:
+  guidance_embedding_channels: 320
+  guidance_input_channels: 3
+  block_out_channels: [16, 32, 96, 256]
+
+base_model_path: 'pretrained_models/stable-diffusion-v1-5'
+vae_model_path: 'pretrained_models/sd-vae-ft-mse'
+image_encoder_path: 'pretrained_models/image_encoder'
+
+weight_dtype: 'fp16'  # [fp16, fp32]
+uncond_ratio: 0.1
+noise_offset: 0.05
+snr_gamma: 5.0
+enable_zero_snr: True 

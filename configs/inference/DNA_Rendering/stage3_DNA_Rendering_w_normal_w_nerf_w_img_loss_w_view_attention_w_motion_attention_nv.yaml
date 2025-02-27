@@ -1,0 +1,170 @@
+exp_name: 'stage3_w_normal_w_nerf_guid_w_img_loss_w_view_attention_w_motion_attention'
+output_dir: './exp_output/DNA_Rendering_ckpt'
+seed: 42
+resume_from_checkpoint: ''
+
+stage1_ckpt_step: 'latest'
+stage1_ckpt_dir: 'pretrained_models/humangif/DNA_Rendering/stage1_w_normal_w_nerf_guid_w_img_loss/saved_models/' 
+
+view_module_path: 'pretrained_models/humangif/DNA_Rendering/stage2_w_normal_w_nerf_guid_w_img_loss_w_view_attention/saved_models/view_module.pth'
+
+mm_path: 'pretrained_models/humangif/DNA_Rendering/stage3_w_normal_w_nerf_guid_w_img_loss_w_view_attention_w_motion_attention/saved_models/motion_module.pth'
+
+test: True
+test_nerf: False
+
+checkpointing_steps: 5000
+# save_model_epoch_interval: 500
+NeRF:
+  pretrain_nerf: False
+  use_smpl_dist_mask: True # False
+  nerf_cond_type: '480_480_upscale'
+  depth_resolution: 48
+
+# use img loss
+use_diff_img_loss: False
+
+# debug
+debug: False
+
+
+data:
+  train_bs: 1
+  video_folder: 'data/DNA_Rendering/train'  # Your data root folder
+  guids: 
+    # - 'depth'
+    - 'normal'
+    # - 'semantic_map'
+    # - 'dwpose'
+    - 'nerf'
+  image_size: 768 #512
+  bbox_crop: false
+  bbox_resize_ratio: [0.9, 1.5]
+  aug_type: "Resize"
+  data_parts:
+    - "all"
+  sample_frames: 24
+  sample_rate: 4
+  crossview_num: 4
+  image_ratio: 0.375
+  nerf_rs_scale: 0.625
+
+validation:
+  video_folder: 'data/DNA_Rendering/test'
+  validation_steps: 5000 #50000
+  clip_length: 6 #1
+  ref_images:
+    - data/DNA_Rendering/test/Part_1_0031_03/camera0022/images/000000.png
+    - data/DNA_Rendering/test/Part_1_0034_04/camera0022/images/000000.png
+    - data/DNA_Rendering/test/Part_1_0094_02/camera0022/images/000000.png
+    - data/DNA_Rendering/test/Part_1_0307_03/camera0022/images/000000.png
+    - data/DNA_Rendering/test/Part_2_0007_07/camera0022/images/000000.png
+    - data/DNA_Rendering/test/Part_2_0016_01/camera0022/images/000000.png
+    - data/DNA_Rendering/test/Part_2_0019_09/camera0022/images/000000.png
+    - data/DNA_Rendering/test/Part_2_0044_07/camera0022/images/000000.png
+    - data/DNA_Rendering/test/Part_2_0078_11/camera0022/images/000000.png
+    - data/DNA_Rendering/test/Part_2_0128_12/camera0022/images/000000.png
+    # - validation_data/ref_images/val-0.png
+  guidance_folders:
+    - data/DNA_Rendering/test/Part_1_0031_03/camera0022
+    - data/DNA_Rendering/test/Part_1_0034_04/camera0022
+    - data/DNA_Rendering/test/Part_1_0094_02/camera0022
+    - data/DNA_Rendering/test/Part_1_0307_03/camera0022
+    - data/DNA_Rendering/test/Part_2_0007_07/camera0022
+    - data/DNA_Rendering/test/Part_2_0016_01/camera0022
+    - data/DNA_Rendering/test/Part_2_0019_09/camera0022
+    - data/DNA_Rendering/test/Part_2_0044_07/camera0022
+    - data/DNA_Rendering/test/Part_2_0078_11/camera0022
+    - data/DNA_Rendering/test/Part_2_0128_12/camera0022
+    # - validation_data/guid_sequences/0
+  # guidance_indexes: [0, 30, 60, 90, 120]
+  guidance_indexes: [20] #[20, 20, 20, 20, 20, 20, 20, 20, 20, 20]
+
+solver:
+  gradient_accumulation_steps: 1
+  mixed_precision: 'fp16'
+  enable_xformers_memory_efficient_attention: True 
+  gradient_checkpointing: True 
+  max_train_steps: 20000 #50000
+  max_grad_norm: 1.0
+  # lr
+  learning_rate: 1e-5
+  scale_lr: False 
+  lr_warmup_steps: 1
+  lr_scheduler: 'linear'
+
+  # optimizer
+  use_8bit_adam: True 
+  adam_beta1: 0.9
+  adam_beta2: 0.999
+  adam_weight_decay:  1.0e-2
+  adam_epsilon: 1.0e-8
+
+noise_scheduler_kwargs:
+  num_train_timesteps: 1000
+  beta_start:          0.00085
+  beta_end:            0.012
+  beta_schedule:       "linear"
+  steps_offset:        1
+  clip_sample:         false
+
+guidance_encoder_kwargs:
+  guidance_embedding_channels: 320
+  guidance_input_channels: 3
+  block_out_channels: [16, 32, 96, 256]
+
+unet_additional_kwargs:
+  use_inflated_groupnorm: true
+  unet_use_cross_frame_attention: false 
+  unet_use_temporal_attention: false
+  # crossview module
+  use_crossview_3d_attention: false
+  use_crossview_module: true
+  crossview_module_resolutions:
+  # - 1
+  - 2
+  - 4
+  - 8
+  crossview_module_mid_block: true 
+  crossview_module_decoder_only: false
+  crossview_module_type: Vanilla
+  crossview_module_kwargs:
+    num_attention_heads: 8
+    num_transformer_block: 1
+    attention_block_types:
+    - Crossview_Self
+    - Crossview_Self
+    crossview_position_encoding: false
+    crossview_position_encoding_max_len: 32
+    crossview_attention_dim_div: 1
+  # motion module
+  # use_motion_module: false
+  use_motion_module: true
+  motion_module_resolutions:
+  # - 1
+  - 2
+  - 4
+  - 8
+  motion_module_mid_block: true 
+  motion_module_decoder_only: false
+  motion_module_type: Vanilla
+  motion_module_kwargs:
+    num_attention_heads: 8
+    num_transformer_block: 1
+    attention_block_types:
+    - Temporal_Self
+    - Temporal_Self
+    temporal_position_encoding: true
+    temporal_position_encoding_max_len: 32
+    temporal_attention_dim_div: 1
+
+base_model_path: 'pretrained_models/stable-diffusion-v1-5'
+vae_model_path: 'pretrained_models/sd-vae-ft-mse'
+image_encoder_path: 'pretrained_models/image_encoder'
+# mm_path: './pretrained_models/mm_sd_v15_v2.ckpt'
+
+weight_dtype: 'fp16'  # [fp16, fp32]
+uncond_ratio: 0.1
+noise_offset: 0.05
+snr_gamma: 5.0
+enable_zero_snr: True
