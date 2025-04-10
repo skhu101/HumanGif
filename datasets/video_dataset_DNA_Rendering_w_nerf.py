@@ -493,7 +493,7 @@ class VideoDataset(Dataset):
         ref_msk = cv2.remap(ref_msk, mapx, mapy, cv2.INTER_LINEAR)
 
         white_background = False
-        ref_img[ref_msk == 0] = 1 if white_background else 0
+        ref_img[ref_msk == 0] = 255 if white_background else 0
 
         if self.image_ratio != 1.:
             H, W = int(ref_img.shape[0] * self.image_ratio), int(ref_img.shape[1] * self.image_ratio)
@@ -593,7 +593,7 @@ class VideoDataset(Dataset):
                 tgt_msk = cv2.remap(tgt_msk, mapx, mapy, cv2.INTER_LINEAR)
 
                 white_background = False
-                tgt_img[tgt_msk == 0] = 1 if white_background else 0
+                tgt_img[tgt_msk == 0] = 255 if white_background else 0
                 if self.image_ratio != 1.:
                     H, W = int(tgt_img.shape[0] * self.image_ratio), int(tgt_img.shape[1] * self.image_ratio)
                     tgt_img = cv2.resize(tgt_img, (W, H), interpolation=cv2.INTER_AREA)

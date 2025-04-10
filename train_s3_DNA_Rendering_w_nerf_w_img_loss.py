@@ -271,7 +271,7 @@ def load_image(img_path, smpl_model, nerf_rs_scale=0.125, image_ratio=0.25, tgt_
     msk = cv2.remap(msk, mapx, mapy, cv2.INTER_LINEAR)
 
     white_background = False
-    img[msk == 0] = 1 if white_background else 0
+    img[msk == 0] = 255 if white_background else 0
 
     if image_ratio != 1.:
         H, W = int(img.shape[0] * image_ratio), int(img.shape[1] * image_ratio)
