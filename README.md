@@ -15,7 +15,7 @@
 
 <div align='Center'>
     <a href='https://arxiv.org/pdf/2502.12080'><img src='https://img.shields.io/badge/Paper-Arxiv-red'></a>
-    <a href='https://github.com/skhu101/HumanGif'><img src='https://img.shields.io/badge/Project-Page-Green'></a>
+    <a href='https://skhu101.github.io/HumanGif/'><img src='https://img.shields.io/badge/Project-Page-Green'></a>
     <a href='https://huggingface.co/Sony/humangif'><img src='https://img.shields.io/badge/HuggingFace-FFD21E?logo=huggingface&logoColor=000'></a>
 </div>
 
