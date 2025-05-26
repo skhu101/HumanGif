@@ -19,7 +19,7 @@
     <a href='https://huggingface.co/Sony/humangif'><img src='https://img.shields.io/badge/HuggingFace-FFD21E?logo=huggingface&logoColor=000'></a>
 </div>
 
-# Framework
+<!-- # Framework -->
 
 ![framework](assets_img/teaser_v1.png)
 
