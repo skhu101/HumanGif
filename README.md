@@ -21,7 +21,7 @@
 
 # Framework
 
-![framework](assets_img/overview.jpg)
+![framework](assets_img/teaser_v1.png)
 
 # News
 
